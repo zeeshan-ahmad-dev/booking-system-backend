@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema({
     },
     hashedPassword: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     isActive: {
         type: Boolean,

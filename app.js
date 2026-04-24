@@ -1,5 +1,6 @@
-import express, { urlencoded } from 'express';
+import express from 'express';
 import { configDotenv } from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { connectDb } from './db/config.js';
 import { errorHandler } from './middlewares/errorMiddleware.js';
 import { logger } from './middlewares/loggerMiddleware.js';
@@ -13,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;  
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
