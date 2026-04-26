@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/errorMiddleware.js';
 import { logger } from './middlewares/loggerMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import { asyncHandler } from './middlewares/asyncHandler.js';
+import { restrictTo } from './middlewares/restrictRoleMiddleware.js';
 
 configDotenv();
 connectDb();
