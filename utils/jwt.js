@@ -3,7 +3,6 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 const SECRET = process.env.SECRET_KEY;
-console.log(SECRET);
 
 
 export const generateToken = async (payload) => {

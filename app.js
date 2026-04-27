@@ -5,8 +5,9 @@ import { connectDb } from './db/config.js';
 import { errorHandler } from './middlewares/errorMiddleware.js';
 import { logger } from './middlewares/loggerMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
+import listingRoutes from './routes/listingRoutes.js';
 import { asyncHandler } from './middlewares/asyncHandler.js';
-import { restrictTo } from './middlewares/restrictRoleMiddleware.js';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 
 configDotenv();
 connectDb();
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
 app.use("/auth", asyncHandler(authRoutes))
+app.use("/listings", authMiddleware, asyncHandler(listingRoutes))
+
 app.get("/", (req, res) => {
     res.send(`API is running on PORT: ${PORT}`);
 })
