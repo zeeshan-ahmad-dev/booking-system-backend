@@ -11,3 +11,30 @@ export const fetchListings = async () => {
 
     return listing;
 }
+
+export const updateListingInDB = async (data, id) => {
+    const updateData = {};
+
+    if (data.title !== undefined) updateData.title = data.title;
+    if (data.description !== undefined) updateData.description = data.description;
+    if (data.location !== undefined) updateData.location = data.location;
+    if (data.price !== undefined) updateData.price = data.price;
+
+    const listing = await listingsModel.findOneAndUpdate({ _id: id }, {$set: updateData}, {new: true});
+
+    if (!listing) {
+        throw new Error("Listing not updated");
+    }
+
+    return listing;
+}
+
+export const deleteListingInDB = async (id) => {
+    const listing = await listingsModel.findByIdAndDelete(id);
+
+    if (!listing) {
+        throw new Error("Listing not found");
+    }
+
+    return listing;
+}
