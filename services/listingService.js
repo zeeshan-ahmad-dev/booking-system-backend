@@ -6,8 +6,14 @@ export const createListing = async (data) => {
     return listing;
 }
 
-export const fetchListings = async () => {
-    const listing = await listingsModel.find();
+export const fetchAllListings = async () => {
+    const listings = await listingsModel.find();
+
+    return listings;
+}
+
+export const fetchListing = async (listingId) => {
+    const listing = await listingsModel.findById(listingId);
 
     return listing;
 }

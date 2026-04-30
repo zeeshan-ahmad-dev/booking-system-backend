@@ -1,4 +1,4 @@
-import { createListing, deleteListingInDB, fetchListings, updateListingInDB } from '../services/listingService.js';
+import { createListing, deleteListingInDB, fetchAllListings, fetchListing, updateListingInDB } from '../services/listingService.js';
 
 export const addListing = async (req, res) => {
     const { title, description, location, price } = req.body;
@@ -13,12 +13,19 @@ export const addListing = async (req, res) => {
     res.status(201).json({ success: true, listing })
 }
 
-export const getListings = async (req, res) => {
-    const userId = req.user.sub;
-
-    const listings = await fetchListings();
+export const getAllListings = async (req, res) => {
+    const listings = await fetchAllListings();
 
     res.status(200).json({ success: true, listings });
+}
+    
+
+export const getListing = async (req, res) => {
+    const listingId = req.params.id;
+
+    const listing = await fetchListing(listingId);
+
+    res.status(200).json({ success: true, listing });
 }
     
 export const updateListing = async (req, res) => {
