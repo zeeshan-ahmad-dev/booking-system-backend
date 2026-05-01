@@ -26,7 +26,6 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-
     const user = await userModel.findOne({ email }).select("+hashedPassword");
 
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
