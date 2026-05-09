@@ -6,7 +6,7 @@ import { errorHandler } from './middlewares/errorMiddleware.js';
 import { logger } from './middlewares/loggerMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import listingRoutes from './routes/listingRoutes.js';
-import { asyncHandler } from './middlewares/asyncHandler.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 
 configDotenv();
@@ -20,12 +20,13 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
-app.use("/auth", asyncHandler(authRoutes))
-app.use("/listings", authMiddleware, asyncHandler(listingRoutes))
+app.use("/auth", authRoutes);
+app.use("/listings", authMiddleware, listingRoutes);
+app.use("/bookings", authMiddleware, bookingRoutes);
 
 app.get("/", (req, res) => {
     res.send(`API is running on PORT: ${PORT}`);
-})
+});
 
 app.use(errorHandler);
 

@@ -1,4 +1,4 @@
-import listingsModel from "../models/listingsModel.js"
+import listingsModel from "../models/listingModel.js"
 
 export const createListing = async (data) => {
     const listing = await listingsModel.insertOne({ ...data, host: data.hostId})
