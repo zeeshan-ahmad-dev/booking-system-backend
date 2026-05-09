@@ -1,14 +1,40 @@
 import { createListing, deleteListingInDB, fetchAllListings, fetchListing, updateListingInDB } from '../services/listingService.js';
 
 export const addListing = async (req, res) => {
-    const { title, description, location, price } = req.body;
+    const { title,
+        description,
+        location,
+        price,
+        images,
+        category,
+        amenities,
+        maxGuests,
+        bedrooms,
+        bathrooms,
+        beds 
+    } = req.body;
     const hostId = req.user.sub;
 
     if (!title || !description || !location || !price || !hostId) {
         return res.status(400).json({ success: false, message: "Please, fill out the data" });
     };
 
-    const listing = await createListing({title, description, location, price, hostId});
+    const listingData = {
+        title,
+        description,
+        location,
+        price,
+        hostId,
+        images,
+        category,
+        amenities,
+        maxGuests,
+        bedrooms,
+        bathrooms,
+        beds 
+    };
+
+    const listing = await createListing(listingData);
 
     res.status(201).json({ success: true, listing })
 }

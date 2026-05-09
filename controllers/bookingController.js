@@ -1,6 +1,6 @@
 import { createBooking } from '../services/bookingService.js';
 
-export const addBooking = async (req, res) => {
+export const addBooking = async (req, res, next) => {
     try {
         const { listingId } = req.params;
         const { startDate, endDate } = req.body;

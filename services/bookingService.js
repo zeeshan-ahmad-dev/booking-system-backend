@@ -10,6 +10,19 @@ export const createBooking = async (listingId, startDate, endDate, userId) => {
         throw new Error("End date must be after start date");
     }
     
+    const bookings = await bookingModel.find({
+        listing: listingId,
+        startDate: { $lte: endDate },
+        endDate: { $gte: startDate }
+    });
+
+    if (bookings.length > 0) {
+        const err = new Error;
+        err.message = "This listing is already booked for selected dates";
+        err.status = 409;
+        throw err;
+    }
+
     const listing = await listingModel.findById(listingId);
 
     if(!listing) {
@@ -33,7 +46,7 @@ export const createBooking = async (listingId, startDate, endDate, userId) => {
         throw err;
     }
 
-    const totalPrice = calculateTotalPrice(listing.startDate, listing.endDate, listing.price.amount, listing.priceType)
+    const totalPrice = calculateTotalPrice(startDate, endDate, listing.price.amount, listing.priceType)
 
     const booking  = await bookingModel.create({
         user: userId,
