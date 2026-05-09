@@ -58,3 +58,51 @@ export const createBooking = async (listingId, startDate, endDate, userId) => {
     
     return booking;
 }
+
+export const confirmBooking = async (bookingId, userId) => {
+    const booking = await bookingModel.findById(bookingId).populate("listing");
+    
+    if (!booking) {
+        const err = new Error;
+        err.message = "Booking not available";
+        err.status = 404;
+        throw err;
+    }
+
+    if (booking.listing.host.toString() !== userId.toString()) {
+        const err = new Error;
+        err.message = "You are not the host";
+        err.status = 401;
+        throw err;
+    }
+
+    booking.status = "confirmed";
+
+    await booking.save();
+
+    return booking;
+}
+
+export const cancelBooking = async (bookingId, userId) => {
+    const booking = await bookingModel.findById(bookingId).populate("listing");
+
+    if (!booking) {
+        const err = new Error;
+        err.message = "Booking not available";
+        err.status = 404;
+        throw err;
+    }
+
+    if (booking.listing.host.toString() !== userId.toString()) {
+        const err = new Error;
+        err.message = "You are not the host";
+        err.status = 401;
+        throw err;
+    }
+
+    booking.status = "cancelled";
+
+    await booking.save();
+
+    return booking;
+}

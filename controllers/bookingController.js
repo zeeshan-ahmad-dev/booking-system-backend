@@ -1,4 +1,4 @@
-import { createBooking } from '../services/bookingService.js';
+import { createBooking, confirmBooking, cancelBooking as cancellBookingService } from '../services/bookingService.js';
 
 export const addBooking = async (req, res, next) => {
     try {
@@ -16,5 +16,31 @@ export const addBooking = async (req, res, next) => {
         return res.status(201).json({ success: true, message: "Booking created successfully", booking })
     } catch (error) {
         next(error);
+    }
+}
+
+export const approveBooking = async (req, res, next) => {
+    try {
+        const { bookingId } = req.params;
+        const { sub } = req.user;
+
+        const booking = await confirmBooking(bookingId, sub)
+        
+        return res.status(200).json({ success: true, message: "Booking confirmed successfully", booking })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const cancelBooking = async (req, res, next) => {
+    try {
+        const { bookingId } = req.params;
+        const { sub } = req.user;
+
+        const booking = await cancellBookingService(bookingId, sub)
+        
+        return res.status(200).json({ success: true, message: "Booking cancelled successfully", booking })
+    } catch (error) {
+        next(error)
     }
 }
