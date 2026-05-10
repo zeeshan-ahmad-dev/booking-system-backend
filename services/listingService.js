@@ -2,7 +2,11 @@ import listingsModel from "../models/listingModel.js"
 import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
-    const listing = await listingsModel.insertOne({ ...data, host: data.hostId})
+    if (!data.hostId) {
+        throwErr("Host ID is required", 400);
+    }
+
+    const listing = await listingsModel.create({ ...data, host: data.hostId});
 
     return listing;
 }
@@ -25,7 +29,15 @@ export const fetchAllListings = async (page, limit, location, price) => {
 }
 
 export const fetchListing = async (listingId) => {
+    if (!listingId) {
+        throwErr("Listing id is required", 400);
+    }
+
     const listing = await listingsModel.findById(listingId);
+
+    if (!listing) {
+        throwErr("Listing not found", 404);
+    }
 
     return listing;
 }

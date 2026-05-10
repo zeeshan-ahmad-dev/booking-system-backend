@@ -14,7 +14,6 @@ export const createUser = async (firstName, lastName, email, username, hashedPas
   }
 
   try {
-    
     const user = await userModel.create({ firstName, lastName, email, username, hashedPassword, role });
     
     return user;
