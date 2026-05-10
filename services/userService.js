@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import { throwErr } from "../utils/errorHandler.js";
 
 export const createUser = async (firstName, lastName, email, username, hashedPassword, role) => {
   if (
@@ -9,7 +10,7 @@ export const createUser = async (firstName, lastName, email, username, hashedPas
     !hashedPassword || 
     !role
   ) {
-    throw new Error("All fields are required");
+    throwErr("All fields are required", 400);
   }
 
   try {
@@ -19,8 +20,9 @@ export const createUser = async (firstName, lastName, email, username, hashedPas
     return user;
   } catch (error) {
       if (error.code === 11000) {
-          throw new Error("User already exists");
+          throwErr("User already exists", 409);
       }
-    throw error;
+
+      throw error;
   }
 };

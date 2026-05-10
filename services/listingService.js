@@ -1,4 +1,5 @@
 import listingsModel from "../models/listingModel.js"
+import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
     const listing = await listingsModel.insertOne({ ...data, host: data.hostId})
@@ -40,7 +41,7 @@ export const updateListingInDB = async (data, id) => {
     const listing = await listingsModel.findOneAndUpdate({ _id: id }, {$set: updateData}, {new: true});
 
     if (!listing) {
-        throw new Error("Listing not updated");
+        throwErr("Listing not found", 404);
     }
 
     return listing;
@@ -49,13 +50,13 @@ export const updateListingInDB = async (data, id) => {
 export const deleteListingInDB = async (id, userId) => {
     const isOwner = await listingsModel.findOne({ _id: id, host: userId })
     if (!isOwner) {
-        throw new Error("You are not authorized!");
+        throwErr("You are not authorized!", 403);
     }
 
     const listing = await listingsModel.findByIdAndDelete(id);
 
     if (!listing) {
-        throw new Error("Listing not found");
+        throwErr("Listing not found", 404);
     }
 
     return listing;

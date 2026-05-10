@@ -7,7 +7,7 @@ import { restrictTo } from '../middlewares/restrictRoleMiddleware.js';
 const router = express.Router();
 
 router.post("/:listingId", authMiddleware, asyncHandler(addBooking));
-router.patch("/confirm/:bookingId", authMiddleware, restrictTo("host"), asyncHandler(approveBooking));
-router.patch("/cancel/:bookingId", authMiddleware, restrictTo("host"), asyncHandler(cancelBooking));
+router.patch("/:bookingId/confirm", authMiddleware, restrictTo("host"), asyncHandler(approveBooking));
+router.patch("/:bookingId/cancel", authMiddleware, restrictTo("host"), asyncHandler(cancelBooking));
 
 export default router;
