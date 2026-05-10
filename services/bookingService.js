@@ -87,3 +87,9 @@ export const cancelBooking = async (bookingId, userId) => {
 
     return booking;
 }
+
+export const fetchBookings = async (userId) => {
+    const bookings = await bookingModel.find({user: userId}).populate("listing").lean();
+
+    return bookings;
+}

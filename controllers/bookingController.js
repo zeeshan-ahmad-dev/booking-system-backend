@@ -1,4 +1,4 @@
-import { createBooking, confirmBooking, cancelBooking as cancellBookingService } from '../services/bookingService.js';
+import { createBooking, confirmBooking, cancelBooking as cancellBookingService, fetchBookings } from '../services/bookingService.js';
 
 export const addBooking = async (req, res, next) => {
     try {
@@ -40,6 +40,18 @@ export const cancelBooking = async (req, res, next) => {
         const booking = await cancellBookingService(bookingId, sub)
         
         return res.status(200).json({ success: true, message: "Booking cancelled successfully", booking })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getBookings = async (req, res, next) => {
+    try {
+        const { sub } = req.user;
+
+        const bookings = await fetchBookings(sub)
+        
+        return res.status(200).json({ success: true, message: "Booking fetched successfully", bookings })
     } catch (error) {
         next(error)
     }
