@@ -5,6 +5,7 @@ import {
   fetchListing,
   updateListingInDB,
 } from "../services/listingService.js";
+import { throwErr } from "../utils/errorHandler.js";
 
 export const addListing = async (req, res, next) => {
   try {
@@ -25,9 +26,7 @@ export const addListing = async (req, res, next) => {
     const hostId = req.user.sub;
 
     if (!title || !description || !location || price == null) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Required fields are missing" });
+      throwErr("Required fields are missing", 400);
     }
 
     const listing = await createListing({
@@ -81,9 +80,7 @@ export const updateListing = async (req, res, next) => {
     const { id } = req.params;
 
     if (!id) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Please, provide the listing id" });
+      throwErr("Please, provide the listing id", 400);
     }
 
     const listing = await updateListingInDB(data, id);
@@ -110,6 +107,7 @@ export const deleteListing = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Listing deleted successfully",
+      listing
     });
   } catch (error) {
     next(error);

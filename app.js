@@ -7,6 +7,7 @@ import { logger } from './middlewares/loggerMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import listingRoutes from './routes/listingRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 
 configDotenv();
@@ -23,6 +24,7 @@ app.use(logger);
 app.use("/auth", authRoutes);
 app.use("/listings", authMiddleware, listingRoutes);
 app.use("/bookings", authMiddleware, bookingRoutes);
+app.use("/reviews", authMiddleware, reviewRoutes);
 
 app.get("/", (req, res) => {
     res.send(`API is running on PORT: ${PORT}`);
