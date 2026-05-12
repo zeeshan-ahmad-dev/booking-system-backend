@@ -4,6 +4,7 @@ import {
   fetchAllListings,
   fetchListing,
   updateListingInDB,
+  fetchReviewsSummary
 } from "../services/listingService.js";
 import { throwErr } from "../utils/errorHandler.js";
 
@@ -113,3 +114,26 @@ export const deleteListing = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getReviewsSummary = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please, provide the listing id" });
+    }
+
+    const rating = await fetchReviewsSummary(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Rating summary fetched successfully",
+      rating
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -1,4 +1,5 @@
 import listingsModel from "../models/listingModel.js"
+import reviewModel from "../models/reviewModel.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
@@ -72,4 +73,19 @@ export const deleteListingInDB = async (id, userId) => {
     }
 
     return listing;
+}
+
+export const fetchReviewsSummary = async (id) => {
+    const result = await reviewModel.aggregate([
+        { $match: { listing: id } },
+        { 
+            $group: {
+                _id: "$listing",
+                totalReviews: { $sum: 1 },
+                avgRating: { $avg: "$rating" }
+            }
+        }
+    ]);
+
+    return result[0] || {totalReviews: 0, avgRating: 0};
 }

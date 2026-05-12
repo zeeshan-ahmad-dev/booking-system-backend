@@ -1,6 +1,6 @@
-import bookingModel from "../models/bookingModel";
-import reviewModel from "../models/reviewModel"
-import { throwErr } from "../utils/errorHandler";
+import bookingModel from "../models/bookingModel.js";
+import reviewModel from "../models/reviewModel.js"
+import { throwErr } from "../utils/errorHandler.js";
 
 export const createReview = async (listingId, bookingId, rating, comment, userId) => {
     const booking = await bookingModel.findOne({ _id: bookingId, listing: listingId, user: userId });
