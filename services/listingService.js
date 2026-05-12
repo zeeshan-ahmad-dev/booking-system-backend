@@ -1,7 +1,6 @@
 import bookingModel from "../models/bookingModel.js";
 import listingsModel from "../models/listingModel.js"
 import reviewModel from "../models/reviewModel.js";
-import { buildFilterQuery } from "../utils/buildFilterQuery.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
@@ -14,11 +13,9 @@ export const createListing = async (data) => {
     return listing;
 }
 
-export const fetchAllListings = async (page, limit, location, minPrice, maxPrice, startDate, endDate) => {
+export const fetchAllListings = async (page, limit, startDate, endDate, filter) => {
     page = +page;
     limit = +limit;
-
-    const filter = buildFilterQuery({page, limit, location, minPrice, maxPrice, startDate, endDate})
 
     const hasDateFilter = startDate && endDate;
     

@@ -14,8 +14,14 @@ export const buildFilterQuery = (query) => {
         if (query.maxPrice) filter["price.amount"].$lte = Number(query.maxPrice);
     }
 
-    if (query.category) {
-        filter.category = query.category;
+    if (query.guests) {
+        filter.maxGuests = { $gte: Number(query.guests) };
+    }
+
+    if (query.amenities) {
+        const amentities = query.amenities.split(",");
+
+        filter.amenities = { $all: amentities };
     }
 
     return filter;

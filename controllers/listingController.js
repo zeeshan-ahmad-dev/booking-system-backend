@@ -6,6 +6,7 @@ import {
   updateListingInDB,
   fetchReviewsSummary
 } from "../services/listingService.js";
+import { buildFilterQuery } from "../utils/buildFilterQuery.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const addListing = async (req, res, next) => {
@@ -53,9 +54,11 @@ export const addListing = async (req, res, next) => {
 
 export const getAllListings = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, location, minPrice, maxPrice, startDate, endDate } = req.query;
+    const { page = 1, limit = 10, location, minPrice, maxPrice, startDate, endDate, guests, amenities } = req.query;
 
-    const listings = await fetchAllListings(page, limit, location, minPrice, maxPrice, startDate, endDate);
+    const filter = buildFilterQuery({page, limit, location, minPrice, maxPrice, startDate, endDate, guests, amenities})
+
+    const listings = await fetchAllListings(page, limit, startDate, endDate, filter);
 
     res.status(200).json({ success: true, listings });
   } catch (error) {
