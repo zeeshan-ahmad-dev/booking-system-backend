@@ -53,9 +53,9 @@ export const addListing = async (req, res, next) => {
 
 export const getAllListings = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, location, price } = req.query;
+    const { page = 1, limit = 10, location, minPrice, maxPrice, startDate, endDate } = req.query;
 
-    const listings = await fetchAllListings(page, limit, location, price);
+    const listings = await fetchAllListings(page, limit, location, minPrice, maxPrice, startDate, endDate);
 
     res.status(200).json({ success: true, listings });
   } catch (error) {

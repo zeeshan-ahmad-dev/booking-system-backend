@@ -1,5 +1,7 @@
+import bookingModel from "../models/bookingModel.js";
 import listingsModel from "../models/listingModel.js"
 import reviewModel from "../models/reviewModel.js";
+import { buildFilterQuery } from "../utils/buildFilterQuery.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
@@ -12,20 +14,26 @@ export const createListing = async (data) => {
     return listing;
 }
 
-export const fetchAllListings = async (page, limit, location, price) => {
-    const filter = {};
+export const fetchAllListings = async (page, limit, location, minPrice, maxPrice, startDate, endDate) => {
     page = +page;
     limit = +limit;
 
-    if (location) {
-        filter.location = location;
-    }
-    if (price) {
-        filter.price = price;
+    const filter = buildFilterQuery({page, limit, location, minPrice, maxPrice, startDate, endDate})
+
+    const hasDateFilter = startDate && endDate;
+    
+    if (hasDateFilter) {
+        const bookings = await bookingModel.find({ 
+            startDate: { $lte: endDate }, 
+            endDate: { $gte: startDate } 
+        });
+        
+        const unavailableBookingIds = bookings.map((booking) => booking.listing)
+
+        filter._id = { $nin: unavailableBookingIds };
     }
 
-    const listings = await listingsModel.find(filter).skip((page - 1) * limit).limit(limit);
-
+    const listings = await listingsModel.find(filter).skip((page - 1) * limit).limit(limit).lean();
     return listings;
 }
 
