@@ -22,3 +22,32 @@ export const createReview = async (listingId, bookingId, rating, comment, userId
 
     return review;
 }
+
+export const fetchListingReviews = async (listingId) => {
+    const reviews = await reviewModel.find({ listing: listingId });
+
+    return reviews;
+}
+
+export const editReview = async (id, comment, rating) => {
+    const reviews = await reviewModel.findByIdAndUpdate(id, 
+        { rating: rating, comment: comment },
+        { new: true, runValidators: true }
+    );
+
+    if (!review) {
+        throw new Error("Review not found");
+    }
+
+    return review;
+}
+
+export const deleteReview = async (id) => {
+    const reviews = await reviewModel.findByIdAndDelete(id);
+
+    if (!review) {
+        throw new Error("Review not found");
+    }
+    
+    return reviews;
+}
