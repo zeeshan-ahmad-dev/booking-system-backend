@@ -37,7 +37,9 @@ bookingSchema.pre("save", function(next) {
     if (this.endDate <= this.startDate) {
         return next(new Error("End date must be after start date"));
     }
-})
+});
+
+bookingSchema.index({ listing: 1, startDate: 1, endDate: 1 });
 
 const bookingModel = mongoose.model("booking", bookingSchema);
 
