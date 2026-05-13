@@ -4,11 +4,11 @@ import reviewModel from "../models/reviewModel.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const createListing = async (data) => {
-    if (!data.hostId) {
+    if (!data.host) {
         throwErr("Host ID is required", 400);
     }
 
-    const listing = await listingsModel.create({ ...data, host: data.hostId});
+    const listing = await listingsModel.create(data);
 
     return listing;
 }

@@ -7,6 +7,7 @@ import {
   fetchReviewsSummary
 } from "../services/listingService.js";
 import { buildFilterQuery } from "../utils/buildFilterQuery.js";
+import { uploadToCloudinary } from "../utils/cloudinaryHelper.js";
 import { throwErr } from "../utils/errorHandler.js";
 
 export const addListing = async (req, res, next) => {
@@ -16,8 +17,8 @@ export const addListing = async (req, res, next) => {
       description,
       location,
       price,
-      images,
-      category,
+      currency,
+      propertyType,
       amenities,
       maxGuests,
       bedrooms,
@@ -25,21 +26,34 @@ export const addListing = async (req, res, next) => {
       beds,
     } = req.body;
 
+    const files = req.files;
     const hostId = req.user.sub;
 
     if (!title || !description || !location || price == null) {
       throwErr("Required fields are missing", 400);
     }
 
+    const uploadedImages = await Promise.all(
+      files.map(file => uploadToCloudinary(file.buffer))
+    )
+
+    const images = uploadedImages?.map((img) => img.secure_url) || [];
+    const priceObj = {
+      amount: Number(price),
+      currency,
+    };  
+
+    const amenitiesArray = amenities?.split(",").map((amenity) => amenity.trim()).filter(Boolean) || [];
+
     const listing = await createListing({
       title,
       description,
       location,
-      price,
-      hostId,
+      price: priceObj,
+      host: hostId,
       images,
-      category,
-      amenities,
+      propertyType,
+      amenities: amenitiesArray,
       maxGuests,
       bedrooms,
       bathrooms,

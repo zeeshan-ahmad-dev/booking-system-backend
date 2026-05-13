@@ -9,6 +9,7 @@ import listingRoutes from './routes/listingRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
+import "./cron/bookingCleanupJob.js";
 
 configDotenv();
 connectDb();
