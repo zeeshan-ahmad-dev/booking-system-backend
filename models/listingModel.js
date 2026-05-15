@@ -13,7 +13,8 @@ const AMENITIES = [
   "workspace",
   "gym",
   "breakfast",
-  "pets_allowed"
+  "pets_allowed",
+  "washing machine"
 ];
 
 const listingSchema = new mongoose.Schema({

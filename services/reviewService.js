@@ -18,7 +18,7 @@ export const createReview = async (listingId, bookingId, rating, comment, userId
         throwErr("You already reviewed this booking", 400);
     }
 
-    const review = await reviewModel.create({listing: listingId, boking: bookingId, rating, comment, user: userId});
+    const review = await reviewModel.create({listing: listingId, booking: bookingId, rating, comment, user: userId});
 
     return review;
 }
