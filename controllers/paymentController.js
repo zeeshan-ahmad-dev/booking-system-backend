@@ -32,7 +32,7 @@ export const stripeWebhook = async (req, res, next) => {
 
     if (event.type === "payment_intent.succeeded") {
         const paymentIntent = event.data.object;
-        const bookingId = paymentIntent.metadata.bookingId;
+        const bookingId = paymentIntent?.metadata?.bookingId;
         const booking = await bookingModel.findById(bookingId);
 
         if (booking) {
@@ -46,8 +46,8 @@ export const stripeWebhook = async (req, res, next) => {
     }
 
     if (event.type === "payment_intent.payment_failed") {
-        const paymentIntent = event.type.object;
-        const bookignId = paymentIntent.metadata.bookingId;
+        const paymentIntent = event.data.object;
+        const bookingId = paymentIntent?.metadata?.bookingId;
         const booking = await bookingModel.findById(bookingId);
 
         if (booking) {

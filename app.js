@@ -9,7 +9,6 @@ import listingRoutes from './routes/listingRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import paymentRoutes from './routes/paymentRoute.js';
-import webhookRoutes from './routes/webhookRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 import "./cron/bookingCleanupJob.js";
 import { stripeWebhook } from './controllers/paymentController.js';
