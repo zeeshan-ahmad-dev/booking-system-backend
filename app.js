@@ -8,14 +8,24 @@ import authRoutes from './routes/authRoutes.js';
 import listingRoutes from './routes/listingRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import paymentRoutes from './routes/paymentRoute.js';
+import webhookRoutes from './routes/webhookRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 import "./cron/bookingCleanupJob.js";
+import { stripeWebhook } from './controllers/paymentController.js';
 
 configDotenv();
 connectDb();
 
 const app = express();
 const PORT = process.env.PORT || 8000;  
+
+app.post(
+  "/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  stripeWebhook
+);
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,6 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/listings", authMiddleware, listingRoutes);
 app.use("/bookings", authMiddleware, bookingRoutes);
 app.use("/reviews", authMiddleware, reviewRoutes);
+app.use("/payments", authMiddleware, paymentRoutes);
 
 app.get("/", (req, res) => {
     res.send(`API is running on PORT: ${PORT}`);
