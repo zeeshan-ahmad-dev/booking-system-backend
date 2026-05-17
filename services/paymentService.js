@@ -17,6 +17,8 @@ export const getPaymentClientSecret = async (bookingId) => {
         throwErr("Booking already paid", 400);
     }
 
+    // Create Stripe PaymentIntent for booking payment
+    // amount is converted to smallest currency unit e.g PKR paisa
     const paymentIntent = await stripe.paymentIntents.create({
         amount: booking.totalPrice * 100,
         currency: booking.listing.price.currency.toLowerCase(),

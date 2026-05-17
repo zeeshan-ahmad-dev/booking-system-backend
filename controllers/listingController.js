@@ -33,6 +33,7 @@ export const addListing = async (req, res, next) => {
       throwErr("Required fields are missing", 400);
     }
 
+    // uploading listing images to cloudinary
     const uploadedImages = await Promise.all(
       files.map(file => uploadToCloudinary(file.buffer))
     )
@@ -153,4 +154,3 @@ export const getReviewsSummary = async (req, res, next) => {
     next(error);
   }
 };
-

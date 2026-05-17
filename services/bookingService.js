@@ -11,6 +11,8 @@ export const createBooking = async (listingId, startDate, endDate, userId) => {
         throwErr("End date must be after start date", 400);
     }
     
+    // Check for overlapping bookings
+    // If any booking's date range is overlaps with requested range, block it
     const bookings = await bookingModel.find({
         listing: listingId,
         startDate: { $lte: endDate },
@@ -31,6 +33,7 @@ export const createBooking = async (listingId, startDate, endDate, userId) => {
         throwErr("Listing not available", 409);
     }
 
+    // Prevent hosts from booking their own listings
     if (listing.host.toString() === userId.toString()) {
         throwErr("You cannot book your own listing", 403);
     }

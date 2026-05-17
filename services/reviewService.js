@@ -30,7 +30,7 @@ export const fetchListingReviews = async (listingId) => {
 }
 
 export const editReview = async (id, comment, rating) => {
-    const reviews = await reviewModel.findByIdAndUpdate(id, 
+    const review = await reviewModel.findByIdAndUpdate(id, 
         { rating: rating, comment: comment },
         { new: true, runValidators: true }
     );
@@ -43,11 +43,11 @@ export const editReview = async (id, comment, rating) => {
 }
 
 export const deleteReview = async (id) => {
-    const reviews = await reviewModel.findByIdAndDelete(id);
+    const review = await reviewModel.findByIdAndDelete(id);
 
     if (!review) {
         throw new Error("Review not found");
     }
     
-    return reviews;
+    return review;
 }

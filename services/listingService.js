@@ -19,6 +19,7 @@ export const fetchAllListings = async (page, limit, startDate, endDate, filter) 
 
     const hasDateFilter = startDate && endDate;
     
+    // Don't fetch listings which are booked from startDate to endDate 
     if (hasDateFilter) {
         const bookings = await bookingModel.find({ 
             startDate: { $lte: endDate }, 
@@ -81,6 +82,7 @@ export const deleteListingInDB = async (id, userId) => {
 }
 
 export const fetchReviewsSummary = async (id) => {
+    // Calculate review statistics (total reviews + average rating) for a listing
     const result = await reviewModel.aggregate([
         { $match: { listing: id } },
         { 
